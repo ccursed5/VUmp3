@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard — D0FY3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07090e; 
+    --card:rgba(18, 22, 35, 0.75); 
+    --card-border:rgba(255, 255, 255, 0.08);
+    --text:#f1f5f9; 
+    --muted:#94a3b8;
+    --cyan:#00f2fe; 
+    --blue:#4facfe; 
+    --purple:#7f00ff; 
+    --pink:#e100ff;
+    --green:#10b981; 
+    --red:#ef4444;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Outfit',sans-serif;
+    color:var(--text);
+    min-height:100vh;
+    overflow-x:hidden;
+    background:#07090e;
+  }
+
+  /* ===== Hero Background ===== */
+  .hero{
+    position:relative;
+    height:280px;
+    overflow:hidden;
+    border-bottom:1px solid rgba(255, 255, 255, 0.05);
+    background:
+      radial-gradient(circle at 50% 20%, rgba(127, 0, 255, 0.25), transparent 60%),
+      radial-gradient(circle at 80% 80%, rgba(0, 242, 254, 0.15), transparent 50%),
+      radial-gradient(circle at 10% 50%, rgba(225, 0, 255, 0.15), transparent 50%);
+  }
+
+  .glow-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+    -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+  }
+
+  .title{
+    position:absolute;
+    top:65px;
+    left:0;
+    right:0;
+    text-align:center;
+    z-index:3;
+    font-size:4.2rem;
+    font-weight:800;
+    letter-spacing:6px;
+    line-height:1;
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 30%, #e100ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 25px rgba(0, 242, 254, 0.4));
+  }
+
+  .subtitle {
+    position: absolute;
+    top: 140px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 3;
+    color: var(--muted);
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.5;
+    animation: float 10s ease-in-out infinite alternate;
+  }
+  .orb-1 { width: 140px; height: 140px; background: var(--cyan); top: 20px; left: 15%; animation-delay: 0s; }
+  .orb-2 { width: 180px; height: 180px; background: var(--pink); top: 50px; right: 15%; animation-delay: -3s; }
+  
+  @keyframes float {
+    0% { transform: translateY(0) scale(1); }
+    100% { transform: translateY(-20px) scale(1.1); }
+  }
+
+  /* ===== Content Area ===== */
+  main{
+    max-width:600px;
+    margin:-40px auto 0;
+    padding:0 20px 70px;
+    position:relative;
+    z-index:5;
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+  }
+
+  .card{
+    border-radius:24px;
+    padding:24px;
+    background: var(--card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    border-color: rgba(0, 242, 254, 0.3);
+  }
+
+  /* Avatar Profile Section */
+  .avatar-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: rgba(0, 242, 254, 0.05);
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    border-radius: 18px;
+  }
+  .avatar-img {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: 2px solid var(--cyan);
+    object-fit: cover;
+    box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
+  }
+  .avatar-info h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .avatar-info p {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    margin-right: 6px;
+    box-shadow: 0 0 8px var(--green);
+  }
+
+  .new{text-align:center;padding:32px 24px}
+  .new h2{
+    font-size:2.2rem;
+    font-weight:800;
+    line-height:1.2;
+    margin-bottom:8px;
+    background:linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .new p{color:var(--muted);font-size:1.1rem;margin-bottom:24px}
+  
+  .btn-add{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    padding:14px 32px;
+    border-radius:14px;
+    cursor:pointer;
+    border:none;
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    color:#000;
+    font-family:inherit;
+    font-weight:700;
+    font-size:1.1rem;
+    letter-spacing:0.5px;
+    transition:all .3s ease;
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+  }
+  .btn-add:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(0, 242, 254, 0.5);
+  }
+  .btn-add span{font-size:1.5rem;line-height:1}
+
+  .list{display:flex;flex-direction:column;gap:20px}
+  .room{display:flex;gap:20px;align-items:center}
+  .thumb{
+    width:80px;
+    height:80px;
+    border-radius:18px;
+    flex:none;
+    display:grid;
+    place-items:center;
+    font-size:2.2rem;
+    font-weight:800;
+    color:#fff;
+    border:1px solid rgba(255,255,255,0.2);
+    box-shadow:0 8px 20px rgba(0,0,0,0.3);
+  }
+  .info{min-width:0;flex:1}
+  .info h3{font-size:1.35rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px}
+  
+  .badge{
+    display:inline-block;
+    padding:4px 12px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.1);
+    background:rgba(255,255,255,0.05);
+    color:var(--muted);
+    font-size:0.95rem;
+    margin-bottom:12px;
+  }
+  .badge.on{
+    color:#34d399;
+    border-color:rgba(16, 185, 129, 0.4);
+    background:rgba(16, 185, 129, 0.1);
+  }
+  .badge.trial{
+    color:#f59e0b;
+    border-color:rgba(245, 158, 11, 0.4);
+    background:rgba(245, 158, 11, 0.1);
+  }
+
+  .acts{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .btn-act{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 16px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    background:linear-gradient(135deg, var(--purple), var(--pink));
+    color:#fff;
+    font-family:inherit;
+    font-weight:600;
+    font-size:1rem;
+    text-decoration:none;
+    transition:all .2s ease;
+  }
+  .btn-act:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 20px rgba(225, 0, 255, 0.4);
+  }
+  .btn-trial{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 14px;
+    border-radius:10px;
+    border:1px solid rgba(245, 158, 11, 0.5);
+    background:rgba(245, 158, 11, 0.15);
+    color:#fbbf24;
+    font-family:inherit;
+    font-weight:600;
+    font-size:0.95rem;
+    cursor:pointer;
+    transition:all .2s ease;
+  }
+  .btn-trial:hover{
+    background:rgba(245, 158, 11, 0.3);
+    box-shadow:0 0 15px rgba(245, 158, 11, 0.3);
+  }
+  .btn-join{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 14px;
+    border-radius:10px;
+    border:none;
+    background:linear-gradient(135deg, var(--cyan), var(--blue));
+    color:#000;
+    font-family:inherit;
+    font-weight:700;
+    font-size:0.95rem;
+    text-decoration:none;
+    cursor:pointer;
+    transition:all .2s ease;
+  }
+  .btn-join:hover{
+    box-shadow:0 0 15px rgba(0, 242, 254, 0.4);
+    transform:translateY(-2px);
+  }
+  .btn-del{
+    width:42px;
+    height:40px;
+    border-radius:10px;
+    border:1px solid rgba(239, 68, 68, 0.3);
+    background:rgba(239, 68, 68, 0.1);
+    color:#f87171;
+    cursor:pointer;
+    display:grid;
+    place-items:center;
+    transition:all .2s ease;
+  }
+  .btn-del:hover{
+    background:rgba(239, 68, 68, 0.25);
+    border-color:rgba(239, 68, 68, 0.6);
+  }
+  .open{display:inline-block;margin-top:8px;color:var(--cyan);font-size:0.95rem;text-decoration:none;transition:color 0.2s}
+  .open:hover{text-decoration:underline;color:#38bdf8}
+  svg.ic{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ===== Modal ===== */
+  .modal{
+    position:fixed;
+    inset:0;
+    z-index:50;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    background:rgba(3, 7, 18, 0.85);
+    backdrop-filter:blur(10px);
+  }
+  .modal.open{display:flex}
+  .box{
+    width:100%;
+    max-width:440px;
+    border-radius:24px;
+    padding:28px;
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  }
+  .box h3{
+    font-size:1.8rem;
+    font-weight:800;
+    margin-bottom:4px;
+    background:linear-gradient(135deg, var(--cyan), var(--blue));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .box .hint{color:var(--muted);font-size:1rem;margin-bottom:20px}
+  .box label{display:block;font-size:0.95rem;color:var(--muted);margin-bottom:6px;font-weight:500}
+  .box input, .box select{
+    width:100%;
+    padding:12px 16px;
+    border-radius:12px;
+    border:1px solid rgba(255, 255, 255, 0.1);
+    background:rgba(255, 255, 255, 0.05);
+    color:var(--text);
+    font-family:inherit;
+    font-size:1.05rem;
+    margin-bottom:16px;
+    transition:all 0.2s;
+  }
+  .box select option { background: #0f172a; color: var(--text); }
+  .box input:focus, .box select:focus{
+    outline:none;
+    border-color:var(--cyan);
+    box-shadow:0 0 0 3px rgba(0, 242, 254, 0.15);
+  }
+  .row{display:flex;gap:12px}
+  .row button{flex:1;padding:12px;border-radius:12px;font-family:inherit;font-weight:700;font-size:1.05rem;cursor:pointer;transition:all 0.2s}
+  .cancel{background:transparent;border:1px solid rgba(255, 255, 255, 0.15);color:var(--muted)}
+  .cancel:hover{background:rgba(255, 255, 255, 0.05);color:#fff}
+  .save{border:none;background:linear-gradient(135deg, var(--cyan), var(--blue));color:#000}
+  .save:hover{box-shadow:0 0 20px rgba(0, 242, 254, 0.4)}
+
+  [hidden]{display:none!important}
+  .pay-note{color:var(--muted);font-size:.9rem;margin:0 0 16px;line-height:1.4}
+  .recipient{padding:16px;border:1px solid rgba(16, 185, 129, 0.3);background:rgba(16, 185, 129, 0.08);border-radius:14px;margin:0 0 16px}
+  .recipient-title{font-size:.9rem;color:var(--muted);margin-bottom:4px}
+  .recipient-number{font-size:1.4rem;font-weight:800;letter-spacing:1px;color:#34d399;overflow-wrap:anywhere}
+  .copy-number{
+    margin-top:10px;
+    width:100%;
+    padding:10px 12px;
+    border:1px solid rgba(16, 185, 129, 0.5);
+    border-radius:10px;
+    background:rgba(16, 185, 129, 0.15);
+    color:#34d399;
+    font:inherit;
+    font-weight:700;
+    cursor:pointer;
+    transition:all 0.2s;
+  }
+  .copy-number:hover{background:rgba(16, 185, 129, 0.25)}
+  
+  .foot{text-align:center;color:var(--muted);font-size:.95rem;padding:0 18px 40px}
+  .foot a{color:var(--cyan);text-decoration:none}
+  .foot a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<header class="hero" aria-hidden="true">
+  <div class="glow-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="title">D0FY3</div>
+  <div class="subtitle">IMVU Room Management</div>
+</header>
+
+<main>
+  <!-- Informasi Avatar Terhubung -->
+  <section class="card avatar-card">
+    <img src="https://userimages-akm.imvu.com/userdata/default_avatar.png" alt="Avatar D0FY3" class="avatar-img" id="avatarPic">
+    <div class="avatar-info">
+      <h4><span class="status-dot"></span>D0FY3</h4>
+      <p>Terhubung dengan IMVU Client / Web</p>
+    </div>
+  </section>
+
+  <section class="card new">
+    <h2>Room Baru</h2>
+    <p id="newHint">Tambahkan room untuk memulai</p>
+    <button class="btn-add" id="addBtn" type="button"><span>+</span> TAMBAH ROOM</button>
+  </section>
+
+  <section class="list" id="list" aria-label="Daftar room"></section>
+</main>
+
+<p class="foot">Data room tersimpan di browser ini. <a href="index.html">Kembali ke beranda</a></p>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <form class="box" id="form" autocomplete="off">
+    <h3 id="mTitle">Tambah Room</h3>
+    <p class="hint">Isi nama room IMVU kamu.</p>
+
+    <div id="paymentFields" hidden>
+      <div class="recipient">
+        <div class="recipient-title">Viki Sampauzi (GoPay)</div>
+        <div class="recipient-number">087848454236</div>
+        <button type="button" class="copy-number" onclick="navigator.clipboard.writeText('087848454236'); alert('Nomor berhasil disalin!');">Salin Nomor</button>
+      </div>
+      <label for="payAmount">Nominal pembayaran</label>
+      <select id="payAmount" required>
+        <option value="130000">Rp130.000 - 1 Bulan</option>
+      </select>
+      <p class="pay-note" id="payNote">Pembayaran diproses aman melalui checkout GoPay Midtrans. Premium aktif setelah pembayaran berhasil diverifikasi.</p>
+      <div id="paymentStatus" class="pay-note" role="status" aria-live="polite" hidden></div>
+      <button class="save" id="paidBtn" type="button" style="width:100%;padding:12px;border-radius:12px;font:inherit;font-weight:700;cursor:pointer;margin-bottom:16px">Periksa Status Pembayaran</button>
+    </div>
+
+    <label for="rName">Nama room</label>
+    <input id="rName" type="text" maxlength="40" placeholder="contoh: NamaRoom" required>
+    <label for="rUrl">Link room IMVU</label>
+    <input id="rUrl" type="text" placeholder="https://www.imvu.com/rooms/... atau imvu://...">
+    <div class="row">
+      <button class="cancel" id="cancel" type="button">Batal</button>
+      <button class="save" id="saveBtn" type="submit">Simpan</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  const USERNAME = "D0FY3";
+  const KEY = "d0fy3_dashboard_rooms";
+
+  const $ = id => document.getElementById(id);
+  const colors = [["#7f00ff","#e100ff"],["#00f2fe","#4facfe"],["#f59e0b","#ef4444"],["#10b981","#00f2fe"],["#8b5cf6","#ec4899"]];
+
+  function load(){
+    try{ const v=JSON.parse(localStorage.getItem(KEY)); return Array.isArray(v)?v:[]; }catch(e){ return []; }
+  }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(rooms)); }catch(e){} }
+  let rooms = load();
+
+  const calIcon = '<svg class="ic" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 14v4M10 16h4"/></svg>';
+  const trashIcon = '<svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg>';
+  const giftIcon = '<svg class="ic" viewBox="0 0 24 24"><path d="M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>';
+  const joinIcon = '<svg class="ic" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>';
+
+  function hash(s){ let h=0; for(const c of s) h=(h*31+c.charCodeAt(0))>>>0; return h; }
+  function isPremium(r){ return r.premiumUntil && Date.parse(r.premiumUntil) > Date.now(); }
+  function fmtDate(s){ return new Date(s).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}); }
+
+  // Fungsi untuk konversi/masuk ke room IMVU secara langsung dengan avatar D0FY3
+  function joinRoomWithAvatar(url) {
+    if (!url) {
+      alert('Link room belum diisi.');
+      return;
+    }
+    
+    // Jika format URL web biasa, ubah/arahkan ke skema IMVU Client (imvu://) atau buka halaman IMVU
+    let clientUrl = url;
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      if (url.includes('imvu.com/rooms/')) {
+        clientUrl = url.replace(/https?:\/\/(www\.)?imvu\.com\/rooms\//i, 'imvu://room/');
+      }
+    }
+    
+    // Mencoba membuka via IMVU Client App
+    window.location.href = clientUrl;
+
+    // Fallback jika dibuka via browser
+    setTimeout(() => {
+      window.open(url, '_blank');
+    }, 800);
+  }
+
+  function activateTrial(roomId) {
+    const room = rooms.find(r => r.id === roomId);
+    if (!room) return;
+    if (room.trialUsed) {
+      alert('Trial gratis 3 hari sudah pernah digunakan untuk room ini.');
+      return;
+    }
+    if (confirm('Aktifkan Trial Gratis 3 Hari untuk room "' + room.name + '"?')) {
+      const now = new Date();
+      now.setDate(now.getDate() + 3);
+      room.premiumUntil = now.toISOString();
+      room.trialUsed = true;
+      room.isTrial = true;
+      save();
+      render();
+      alert('Selamat! Trial 3 hari berhasil diaktifkan untuk ' + room.name);
+    }
+  }
+
+  function render(){
+    const list=$('list'); list.innerHTML='';
+    $('newHint').textContent = rooms.length ? 'Tambahkan room lain' : 'Tambahkan room untuk memulai';
+    rooms.forEach(r=>{
+      const c=document.createElement('article'); c.className='card room';
+      c.innerHTML='<div class="thumb"></div><div class="info"><h3></h3><span class="badge"></span>'+
+        '<div class="acts"><a class="btn-act"></a></div></div>';
+      const th=c.querySelector('.thumb'), col=colors[hash(r.name)%colors.length];
+      th.style.background='linear-gradient(135deg,'+col[0]+','+col[1]+')';
+      th.textContent=(r.name.trim()[0]||'?').toUpperCase();
+      c.querySelector('h3').textContent=r.name; c.querySelector('h3').title=r.name;
+      const b=c.querySelector('.badge'), prem=isPremium(r);
+      
+      if(prem) {
+        b.textContent = (r.isTrial ? 'Trial 3 Hari s/d ' : 'Premium sampai ') + fmtDate(r.premiumUntil);
+        b.className = r.isTrial ? 'badge trial' : 'badge on';
+      } else {
+        b.textContent = 'Tanpa premium';
+        b.className = 'badge';
+      }
+
+      const acts=c.querySelector('.acts');
+      
+      // Tombol Masuk Room via Avatar D0FY3
+      if(r.url) {
+        const btnJoin = document.createElement('button');
+        btnJoin.className = 'btn-join';
+        btnJoin.type = 'button';
+        btnJoin.innerHTML = joinIcon + '<span>Masuk Room (D0FY3)</span>';
+        btnJoin.onclick = () => joinRoomWithAvatar(r.url);
+        acts.appendChild(btnJoin);
+      }
+
+      // Tombol Aktifkan / Perpanjang
+      const a=c.querySelector('.btn-act');
+      a.href='#'; a.innerHTML=calIcon+'<span></span>';
+      a.querySelector('span').textContent = prem ? 'Perpanjang' : 'Aktifkan';
+      a.addEventListener('click',ev=>{
+        ev.preventDefault();
+        openModal('payment',r);
+      });
+
+      // Tombol Trial Gratis
+      if(!r.trialUsed && !prem) {
+        const btnTrial = document.createElement('button');
+        btnTrial.className = 'btn-trial';
+        btnTrial.type = 'button';
+        btnTrial.innerHTML = giftIcon + '<span>Coba Trial 3 Hari</span>';
+        btnTrial.onclick = () => activateTrial(r.id);
+        acts.appendChild(btnTrial);
+      }
+
+      // Tombol Hapus
+      const del=document.createElement('button');
+      del.className='btn-del'; del.type='button';
+      del.setAttribute('aria-label', 'Hapus room');
+      del.innerHTML=trashIcon;
+      del.onclick=()=>{
+        if(confirm('Hapus room "'+r.name+'"?')){ rooms=rooms.filter(x=>x.id!==r.id); save(); render(); }
+      };
+      acts.appendChild(del);
+
+      if(r.url){
+        const o=document.createElement('a'); o.className='open'; o.textContent='Buka Tautan Room ↗';
+        o.href=r.url; o.target='_blank'; o.rel='noopener';
+        c.querySelector('.info').appendChild(o);
+      }
+      list.appendChild(c);
+    });
+  }
+
+  const modal=$('modal');
+  let modalMode='room';
+  let selectedRoom=null;
+  function openModal(mode='room', room=null){
+    modalMode=mode;
+    selectedRoom=room;
+    $('form').reset();
+    const payment=mode==='payment';
+    $('paymentFields').hidden=!payment;
+    $('mTitle').textContent=payment?'Pembayaran Premium':'Tambah Room';
+    $('form').querySelector('.hint').textContent=payment
+      ? 'Silakan transfer ke nomor GoPay seller di bawah ini.'
+      : 'Isi nama room IMVU kamu.';
+    $('rName').previousElementSibling.hidden=payment;
+    $('rName').hidden=payment;
+    $('rUrl').previousElementSibling.hidden=payment;
+    $('rUrl').hidden=payment;
+    $('rName').required=!payment;
+    $('rUrl').required=false;
+    $('saveBtn').textContent=payment?'Lanjutkan':'Simpan';
+    $('paidBtn').hidden=!payment;
+    $('paidBtn').disabled=false;
+    $('paidBtn').textContent='Periksa Status Pembayaran';
+    activeOrderId=null;
+    $('paymentStatus').hidden=true;
+    $('paymentStatus').textContent='';
+    $('payNote').textContent='Kirim pembayaran ke nomor GoPay di atas. Premium hanya aktif setelah pembayaran benar-benar diverifikasi.';
+    modal.classList.add('open');
+    setTimeout(()=>{ if(payment) $('payAmount').focus(); else $('rName').focus(); },50);
+  }
+  function closeModal(){ modal.classList.remove('open'); }
+  $('addBtn').onclick=()=>openModal('room');
+  $('cancel').onclick=closeModal;
+  modal.addEventListener('click',e=>{ if(e.target===modal) closeModal(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+  $('form').onsubmit=async e=>{
+    e.preventDefault();
+    if(modalMode==='payment'){
+      if(!selectedRoom){ alert('Pilih room terlebih dahulu.'); return; }
+      $('saveBtn').disabled=true;
+      $('saveBtn').textContent='Membuat pembayaran…';
+      try {
+        const response=await fetch('/api/payments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({roomId:selectedRoom.id,roomName:selectedRoom.name})});
+        const data=await response.json();
+        if(!response.ok) throw new Error(data.error || 'Gagal membuat pembayaran.');
+        activeOrderId=data.orderId;
+        localStorage.setItem('d0fy3_active_payment',JSON.stringify({orderId:data.orderId,roomId:selectedRoom.id}));
+        $('paymentStatus').hidden=false;
+        $('paymentStatus').textContent='Transaksi dibuat. Selesaikan pembayaran GoPay pada halaman checkout. Premium belum aktif.';
+        $('payNote').textContent='Total Rp'+Number(data.amount).toLocaleString('id-ID')+'. Kamu akan diarahkan ke checkout GoPay Midtrans.';
+        window.location.href=data.redirectUrl;
+      } catch(err) {
+        $('paymentStatus').hidden=false;
+        $('paymentStatus').textContent=err.message+' Pastikan server dan kunci Midtrans sudah dikonfigurasi.';
+      } finally {
+        $('saveBtn').disabled=false;
+        $('saveBtn').textContent='Lanjutkan';
+      }
+      return;
+    }
+    const name=$('rName').value.trim(), url=$('rUrl').value.trim();
+    if(!name){ $('rName').focus(); return; }
+    rooms.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),name,url,premiumUntil:null,trialUsed:false,isTrial:false});
+    save(); render(); closeModal();
+  };
+
+  let activeOrderId=null;
+  async function checkPaymentStatus(orderId=activeOrderId){
+    if(!orderId){
+      const saved=JSON.parse(localStorage.getItem('d0fy3_active_payment')||'null');
+      orderId=saved && saved.orderId;
+    }
+    if(!orderId){ $('paymentStatus').hidden=false; $('paymentStatus').textContent='Belum ada transaksi yang perlu diperiksa.'; return; }
+    $('paidBtn').disabled=true;
+    $('paymentStatus').hidden=false;
+    $('paymentStatus').textContent='Memeriksa status langsung ke payment gateway…';
+    try {
+      const response=await fetch('/api/payments/'+encodeURIComponent(orderId));
+      const data=await response.json();
+      if(!response.ok) throw new Error(data.error || 'Transaksi tidak ditemukan.');
+      if(data.status==='paid'){
+        const room=rooms.find(r=>r.id===data.roomId);
+        if(room){ room.premiumUntil=data.premiumUntil; room.paymentStatus='paid'; room.isTrial=false; save(); render(); }
+        $('paymentStatus').textContent='Pembayaran berhasil diverifikasi. Premium sudah aktif sampai '+fmtDate(data.premiumUntil)+'.';
+        $('payNote').textContent='Pembayaran terkonfirmasi oleh Midtrans.';
+        $('paidBtn').textContent='Pembayaran Berhasil';
+        localStorage.removeItem('d0fy3_active_payment');
+      } else {
+        $('paymentStatus').textContent='Status: masih menunggu pembayaran. Premium belum aktif. Selesaikan checkout GoPay lalu periksa lagi.';
+        $('paidBtn').disabled=false;
+      }
+    } catch(err) {
+      $('paymentStatus').textContent=err.message || 'Tidak dapat memeriksa status saat ini.';
+      $('paidBtn').disabled=false;
+    }
+  }
+  $('paidBtn').onclick=()=>checkPaymentStatus();
+
+  const params=new URLSearchParams(location.search);
+  const returnedOrderId=params.get('order_id');
+  if(returnedOrderId){
+    activeOrderId=returnedOrderId;
+    const saved=JSON.parse(localStorage.getItem('d0fy3_active_payment')||'null');
+    if(saved && saved.orderId===returnedOrderId){
+      const room=rooms.find(r=>r.id===saved.roomId);
+      if(room) selectedRoom=room;
+    }
+    openModal('payment',selectedRoom);
+    activeOrderId=returnedOrderId;
+    checkPaymentStatus(returnedOrderId);
+    history.replaceState({},document.title,location.pathname);
+  }
+
+  render();
+</script>
+</body>
+</html>
